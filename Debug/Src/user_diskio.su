@@ -1,0 +1,10 @@
+user_diskio.c:142:13:SD_Select	0	static
+user_diskio.c:147:13:SD_DeSelect	0	static
+user_diskio.c:131:16:SPI_WriteByte	32	static
+user_diskio.c:38:6:SetCommand	28	static
+user_diskio.c:163:21:SendMMCCmd	64	static
+user_diskio.c:98:6:MX_SPI5_FreqSwitch	8	static
+user_diskio.c:153:6:MDD_SDSPI_MediaDetect	8	static
+user_diskio.c:240:20:MDD_SDSPI_MediaInitialize	56	static
+user_diskio.c:441:13:MDD_SDSPI_SectorRead	32	static
+user_diskio.c:535:13:MDD_SDSPI_SectorWrite	24	static
