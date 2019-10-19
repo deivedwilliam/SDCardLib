@@ -20,6 +20,7 @@
 #include "stdio.h"
 #include "user_diskio.h"
 #include "fatfs_platform.h"
+#include "FSDefs.h"
 #include "stm32h7xx.h"
 #include "stm32h743xx.h"
 #include "main.h"
@@ -595,4 +596,90 @@ ErrorStatus MDD_SDSPI_SectorWrite(DWORD sector_addr, BYTE* buffer, BYTE allowWri
 
 
     return SUCCESS;
+}
+
+/*********************************************************
+  Function:
+    WORD MDD_SDSPI_ReadSectorSize (void)
+  Summary:
+    Determines the current sector size on the SD card
+  Conditions:
+    MDD_MediaInitialize() is complete
+  Input:
+    None
+  Return:
+    The size of the sectors for the physical media
+  Side Effects:
+    None.
+  Description:
+    The MDD_SDSPI_ReadSectorSize function is used by the
+    USB mass storage class to return the card's sector
+    size to the PC on request.
+  Remarks:
+    None
+  *********************************************************/
+
+WORD MDD_SDSPI_ReadSectorSize(void)
+{
+	return gMediaSectorSize;
+}
+
+
+/*********************************************************
+  Function:
+    DWORD MDD_SDSPI_ReadCapacity (void)
+  Summary:
+    Determines the current capacity of the SD card
+  Conditions:
+    MDD_MediaInitialize() is complete
+  Input:
+    None
+  Return:
+    The capacity of the device
+  Side Effects:
+    None.
+  Description:
+    The MDD_SDSPI_ReadCapacity function is used by the
+    USB mass storage class to return the total number
+    of sectors on the card.
+  Remarks:
+    None
+  *********************************************************/
+DWORD MDD_SDSPI_ReadCapacity(void)
+{
+    return (MDD_SDSPI_finalLBA);
+}
+
+BYTE MDD_SDSPI_ShutdownMedia(void)
+{
+   SD_DeSelect();
+
+    return 0;
+}
+
+/*****************************************************************************
+  Function:
+    BYTE MDD_SDSPI_WriteProtectState
+  Summary:
+    Indicates whether the card is write-protected.
+  Conditions:
+    The MDD_WriteProtectState function pointer must be pointing to this function.
+  Input:
+    None.
+  Return Values:
+    TRUE -  The card is write-protected
+    FALSE - The card is not write-protected
+  Side Effects:
+    None.
+  Description:
+    The MDD_SDSPI_WriteProtectState function will determine if the SD card is
+    write protected by checking the electrical signal that corresponds to the
+    physical write-protect switch.
+  Remarks:
+    None
+  ***************************************************************************************/
+
+BYTE MDD_SDSPI_WriteProtectState(void)
+{
+    return 0;
 }

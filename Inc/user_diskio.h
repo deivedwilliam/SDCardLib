@@ -7,7 +7,7 @@
 
 #include "integer.h"
 #include "stm32h7xx.h"
-
+#include "FSDefs.h"
 
 //#define SD_CARD_DEBUG
 
@@ -295,30 +295,6 @@ typedef enum
     CRC_ON_OFF
 }SdCMD;
 
-typedef struct
-{
-	BYTE errorCode;
-	union
-	{
-		BYTE value;
-		struct
-		{
-			BYTE sectorSize:	1;
-			BYTE maxLUN: 		1;
-		}   bits;
-	}validityFlags;
-	WORD sectorSize;
-	BYTE maxLUN;
-}MEDIA_INFORMATION;
-
-typedef enum
-{
-	MEDIA_NO_ERROR,                     // No errors
-	MEDIA_DEVICE_NOT_PRESENT,           // The requested device is not present
-	MEDIA_CANNOT_INITIALIZE             // Cannot initialize media
-}MEDIA_ERRORS;
-
-
 /*****************************************************************************/
 /*                                 Prototypes                                */
 /*****************************************************************************/
@@ -327,21 +303,15 @@ DWORD MDD_SDSPI_ReadCapacity(void);
 WORD MDD_SDSPI_ReadSectorSize(void);
 
 BOOL MDD_SDSPI_MediaDetect(void);
-MEDIA_INFORMATION * MDD_SDSPI_MediaInitialize(void);
+MEDIA_INFORMATION* MDD_SDSPI_MediaInitialize(void);
 ErrorStatus MDD_SDSPI_SectorRead(DWORD sector_addr, BYTE* buffer);
 ErrorStatus MDD_SDSPI_SectorWrite(DWORD sector_addr, BYTE* buffer, BYTE allowWriteToZero);
 BYTE MDD_SDSPI_WriteProtectState(void);
 BYTE MDD_SDSPI_ShutdownMedia(void);
 
-extern BYTE ReadByte( BYTE* pBuffer, WORD index);
-extern WORD ReadWord( BYTE* pBuffer, WORD index);
-extern DWORD ReadDWord( BYTE* pBuffer, WORD index);
-
-
-//extern void SetCommand(unsigned char* command_array,
-//		unsigned char start_bit, unsigned char host_bit,
-//		unsigned char command, unsigned int argument,
-//		unsigned char crc7, unsigned char end_bit) __attribute__((always_inline));
+extern BYTE ReadByte(BYTE* pBuffer, WORD index);
+extern WORD ReadWord(BYTE* pBuffer, WORD index);
+extern DWORD ReadDWord(BYTE* pBuffer, WORD index);
 
 
 #ifdef __cplusplus

@@ -20,9 +20,8 @@
 #include "stdio.h"
 #include <integer.h>
 #include "fatfs_platform.h"
-#include "fatfs.h"
 #include "string.h"
-#include "user_diskio.h"
+#include "FSIO.h"
 
 SPI_HandleTypeDef hspi5;
 UART_HandleTypeDef huart3;
@@ -54,6 +53,8 @@ static void MX_SPI5_Init(void);
   */
 int main(void)
 {
+	char buffer[20] = "Deived William filho do Deus!!!";
+	FSFILE* file;
 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 	HAL_Init();
 	/* Configure the system clock */
@@ -64,27 +65,25 @@ int main(void)
 	MX_USB_OTG_FS_PCD_Init();
 	MX_SPI5_Init();
 
-	md = MDD_SDSPI_MediaInitialize();
-	printf("%i\n", md->errorCode);
+	if(FSInit() != FALSE)
+	{
+		printf("File system initialized\n");
+	}
 
-	/* Open file to write */
-//	if(f_open(&fil, "test_file.txt", FA_CREATE_NEW | FA_WRITE) != FR_OK)
-//	{
-//		printf("failed to create or open file\n");
-//	}
-//
-//	/* Writing text */
-//	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
-//	//f_puts("Save the world!!!", &fil);
-//	//f_gets(buff, 10, &fil);
-//	//printf(buff);
-//	/* Close file */
-//	if(f_close(&fil) != FR_OK)
-//	{
-//		printf("failed to close file\n");
-//	}
+	file = FSfopen("deived.txt", "w");
 
+	if(file == NULL)
+	{
+		printf("not opened\n");
+	}
+	FSfwrite(buffer, sizeof(char), 20, file);
 
+	printf(buffer);
+
+	if(!FSfclose(file))
+	{
+		printf("file closed sucess\n");
+	}
 
 	while (1)
 	{
